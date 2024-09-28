@@ -53,7 +53,7 @@ public class Calculator extends JFrame {
             if(KeypadButton.OPERATORS.contains(equation.charAt(i))){
                 operatorPos = i;
                 operator = equation.charAt(i);
-                number1 = Double.parseDouble(equation.substring(i+1, equation.length()));
+                number1 = Double.parseDouble(equation.substring(i, operatorPos - 1));
                 number2 = Double.parseDouble(equation.substring(operatorPos + 1, equation.length()));
             }
         }
