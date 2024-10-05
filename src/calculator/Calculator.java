@@ -1,8 +1,6 @@
 package calculator;
 
 import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
 
 public class Calculator extends JFrame {
 
@@ -21,13 +19,8 @@ public class Calculator extends JFrame {
         add(keypad);
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (UnsupportedLookAndFeelException e) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
+                 InstantiationException e) {
             throw new RuntimeException(e);
         }
 
@@ -36,7 +29,7 @@ public class Calculator extends JFrame {
 
     public void write(char key){
         display.write(key);
-        pack();
+        //pack();
     }
 
     public void evaluate(){
@@ -46,17 +39,24 @@ public class Calculator extends JFrame {
 
     private String solveEquation(String equation){
         int operatorPos;
-        char operator;
-        double number1;
-        double number2;
+        char operator = '=';
+        double number1 = 0;
+        double number2 = 0;
         for(int i = 0; i < equation.length(); i++){
             if(KeypadButton.OPERATORS.contains(equation.charAt(i))){
                 operatorPos = i;
                 operator = equation.charAt(i);
-                number1 = Double.parseDouble(equation.substring(i, operatorPos - 1));
+                number1 = Double.parseDouble(equation.substring(0, operatorPos));
                 number2 = Double.parseDouble(equation.substring(operatorPos + 1, equation.length()));
             }
         }
+        return switch (operator){
+            case '+' -> Double.toString(number1 + number2);
+            case '-' -> Double.toString(number1 - number2);
+            case '*' -> Double.toString(number1 * number2);
+            case '/' -> Double.toString(number1 / number2);
+            default -> throw new IllegalStateException("Unexpected operator: " + operator);
+        };
     }
 /*
     private String solveEquation(String equation) {

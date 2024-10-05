@@ -2,6 +2,8 @@ package calculator;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Set;
 
 public class KeypadButton extends JButton {
@@ -24,6 +26,14 @@ public class KeypadButton extends JButton {
             }
             System.out.println(key);
             calculator.write(key);
+        });
+
+        addComponentListener(new ComponentAdapter() {
+             @Override
+             public void componentResized(ComponentEvent e) {
+                 super.componentResized(e);
+                 setFont(new Font("Comic Sans MS", Font.BOLD,  (int) (getSize().getHeight() * 0.6)));
+             }
         });
     }
 }
