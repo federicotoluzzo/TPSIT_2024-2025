@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public class KeypadButton extends JButton {
     public static final Set<Character> KEYS = Set.of('7', '8', '9', '+', '4', '5', '6', '-', '1', '2', '3', '*', '.', '0', '=', '/');
@@ -18,14 +19,28 @@ public class KeypadButton extends JButton {
 
         setPreferredSize(new Dimension(size, size));
         setText(String.valueOf(key));
+        setBorder(BorderFactory.createRaisedBevelBorder());
 
         addActionListener(e -> {
+            setBorder(BorderFactory.createLoweredBevelBorder());
             if(isResultKey){
                 calculator.evaluate();
+                try {
+                    TimeUnit.MILLISECONDS.sleep(200);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+                setBorder(BorderFactory.createRaisedBevelBorder());
                 return;
             }
             System.out.println(key);
             calculator.write(key);
+            try {
+                TimeUnit.MILLISECONDS.sleep(200);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+            setBorder(BorderFactory.createRaisedBevelBorder());
         });
 
         addComponentListener(new ComponentAdapter() {
