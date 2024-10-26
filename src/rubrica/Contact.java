@@ -1,7 +1,10 @@
 package rubrica;
 
+import org.w3c.dom.ls.LSOutput;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 
 public class Contact extends JPanel {
     private String surname;
@@ -9,21 +12,18 @@ public class Contact extends JPanel {
     private String phoneNumber;
     private String email;
 
-    private JLabel surnameLabel;
     private JLabel nameLabel;
     private JLabel phoneNumberLabel;
     private JLabel emailLabel;
 
-    public Contact(String surname, String name, String phoneNumber, String email) {
+    public Contact(Contacts main, String surname, String name, String phoneNumber, String email) {
         this.surname = surname;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
 
-        surnameLabel = new JLabel(surname);
-        nameLabel = new JLabel(name);
+        nameLabel = new JLabel(surname + " " + name);
 
-        surnameLabel.setFont(new Font("Arial", Font.BOLD, 20));
         nameLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
         phoneNumberLabel = new JLabel(phoneNumber);
@@ -32,5 +32,15 @@ public class Contact extends JPanel {
         emailLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         phoneNumberLabel.setForeground(Color.DARK_GRAY);
         emailLabel.setForeground(Color.DARK_GRAY);
+
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        add(nameLabel);
+        add(phoneNumberLabel);
+        add(emailLabel);
+
+        setBorder(BorderFactory.createRaisedBevelBorder());
+
+        addMouseListener(new DoubleClickListener(() -> System.out.println("ciao")));
     }
 }

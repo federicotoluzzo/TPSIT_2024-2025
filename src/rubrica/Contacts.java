@@ -1,6 +1,7 @@
 package rubrica;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Contacts extends JFrame {
 
@@ -11,8 +12,10 @@ public class Contacts extends JFrame {
     public Contacts() {
         super("Contacts");
 
-        add(new SearchPanel());
-        add(new ButtonMenu(this));
+        setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+
+        getContentPane().add(new SearchPanel(this));
+        getContentPane().add(new ButtonMenu(this));
 
         pack();
 
