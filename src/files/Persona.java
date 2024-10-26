@@ -43,7 +43,8 @@ public class Persona {
             case "capricorno" -> segniZodiacali.CAPRICORNO;
             case "acquario" -> segniZodiacali.ACQUARIO;
             case "pesci" -> segniZodiacali.PESCI;
-        }
+            default -> throw new IllegalArgumentException("Unknown segniZodiacale " + parts[2]);
+        };
     }
 
     public String getCognome() {
