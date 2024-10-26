@@ -14,7 +14,7 @@ public class Contacts extends JFrame {
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
-        getContentPane().add(new SearchPanel(this));
+        getContentPane().add(new MainPanel(this));
         getContentPane().add(new ButtonMenu(this));
 
         pack();
