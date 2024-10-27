@@ -7,16 +7,20 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 
 public class Contact extends JPanel {
-    private String surname;
-    private String name;
-    private String phoneNumber;
-    private String email;
+    public String surname;
+    public String name;
+    public String phoneNumber;
+    public String email;
 
     private JLabel nameLabel;
     private JLabel phoneNumberLabel;
     private JLabel emailLabel;
 
+    private Contacts main;
+
     public Contact(Contacts main, String surname, String name, String phoneNumber, String email) {
+        this.main = main;
+
         this.surname = surname;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -33,7 +37,7 @@ public class Contact extends JPanel {
         phoneNumberLabel.setForeground(Color.DARK_GRAY);
         emailLabel.setForeground(Color.DARK_GRAY);
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new GridLayout(3, 1));
 
         add(nameLabel);
         add(phoneNumberLabel);
@@ -41,6 +45,10 @@ public class Contact extends JPanel {
 
         setBorder(BorderFactory.createRaisedBevelBorder());
 
-        addMouseListener(new DoubleClickListener(() -> System.out.println("ciao")));
+        addMouseListener(new DoubleClickListener(() -> setContact(this)));
+    }
+
+    public void setContact(Contact contact) {
+        main.setContact(contact);
     }
 }

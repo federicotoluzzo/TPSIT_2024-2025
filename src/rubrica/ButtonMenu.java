@@ -2,6 +2,7 @@ package rubrica;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class ButtonMenu extends JPanel {
     private JButton load;
@@ -18,6 +19,10 @@ public class ButtonMenu extends JPanel {
         clear = new JButton("Clear");
         saveContact = new JButton("Save Contact");
         remove = new JButton("Remove");
+
+        saveContact.addActionListener(e -> {
+            main.saveContact();
+        });
 
         add(load);
         add(saveAll);
