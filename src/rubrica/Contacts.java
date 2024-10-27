@@ -17,6 +17,18 @@ public class Contacts extends JFrame {
 
         setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (UnsupportedLookAndFeelException e) {
+            throw new RuntimeException(e);
+        }
+
         mainPanel = new MainPanel(this);
         buttonMenu = new ButtonMenu(this);
 
@@ -35,5 +47,9 @@ public class Contacts extends JFrame {
 
     public void setContact(Contact c){
         mainPanel.editPanel.setContact(c);
+    }
+
+    public void searchContact(String query){
+        mainPanel.searchPanel.searchContact(query);
     }
 }

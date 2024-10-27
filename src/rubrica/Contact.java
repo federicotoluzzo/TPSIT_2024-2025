@@ -44,6 +44,7 @@ public class Contact extends JPanel {
         add(emailLabel);
 
         setBorder(BorderFactory.createRaisedBevelBorder());
+        setFocusable(true);
 
         addMouseListener(new DoubleClickListener(() -> setContact(this)));
     }
