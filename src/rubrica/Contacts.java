@@ -3,6 +3,7 @@ package rubrica;
 import javax.swing.*;
 import java.awt.*;
 
+
 public class Contacts extends JFrame {
 
     public static void main(String[] args) {
