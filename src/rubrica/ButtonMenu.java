@@ -3,6 +3,9 @@ package rubrica;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
 
 public class ButtonMenu extends JPanel {
     private JButton load;
@@ -22,6 +25,14 @@ public class ButtonMenu extends JPanel {
 
         saveContact.addActionListener(e -> {
             main.saveContact();
+        });
+
+        load.addActionListener(e -> {
+            main.loadContacts();
+        });
+
+        saveAll.addActionListener(e -> {
+            main.saveContacts();
         });
 
         add(load);

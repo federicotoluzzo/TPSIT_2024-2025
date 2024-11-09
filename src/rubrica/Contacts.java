@@ -2,6 +2,9 @@ package rubrica;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Scanner;
 
 
 public class Contacts extends JFrame {
@@ -52,5 +55,26 @@ public class Contacts extends JFrame {
 
     public void searchContact(String query){
         mainPanel.searchPanel.searchContact(query);
+    }
+
+    public void addContact(String contact) {
+        mainPanel.searchPanel.addContact(new Contact(this, contact.split(",")[0], contact.split(",")[1], contact.split(",")[2], contact.split(",")[3]));
+    }
+
+    public void saveContacts(){
+        mainPanel.searchPanel.saveContacts();
+    }
+
+    public void loadContacts(){
+        FileReader fr;
+        try {
+            fr = new FileReader("contacts.csv");
+        } catch (FileNotFoundException ex) {
+            throw new RuntimeException(ex);
+        }
+        Scanner sc = new Scanner(fr);
+        while(sc.hasNextLine()) {
+            addContact(sc.nextLine());
+        }
     }
 }

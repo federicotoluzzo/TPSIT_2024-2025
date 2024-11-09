@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Vector;
 
 public class SearchPanel extends JPanel {
@@ -20,16 +24,8 @@ public class SearchPanel extends JPanel {
         contacts = new Vector<>();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         searchBar = new SearchBar(main);
-        contacts.add(new Contact(main,"Dingle", "Quandale", "014104420", "cipolla@gmail.com"));
-        contacts.add(new Contact(main,"Segmentation fault (core dumped)", "Obama", "911", "reeeee@hotmail.com"));
-        contacts.add(new Contact(main,"Kitchens", "Sergio Giavanni", "12345", "pushin@libero.it"));
-        contacts.add(new Contact(main,"Abraham-Joseph", "Shéyaa Bin", "21", "twentyoneopps@outlook.com"));
         add(searchBar);
-        JPanel panel = new JPanel();
-        panel.setBounds(10, 10, 100, 100);
-        panel.setBackground(Color.BLACK);
         JScrollPane scrollPane = new JScrollPane(results);
-        add(panel);
         add(scrollPane);
         results.addMouseListener(new MouseAdapter() {
             @Override
@@ -46,7 +42,7 @@ public class SearchPanel extends JPanel {
         //removeAll();
         //add(searchBar);
         results.setListData(contacts);
-        //results = new JList<>(contacts);
+        this.contacts = contacts;
     }
 
     public void addContact(Contact contact) {
@@ -69,6 +65,19 @@ public class SearchPanel extends JPanel {
             }
         }
         setContacts(results);
+    }
+
+    public void saveContacts(){
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter("contacts.csv");
+            for (Contact c : contacts){
+                pw.println(c.toString());
+            }
+            pw.close();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /*private void setContacts(Vector<Contact> contacts){
