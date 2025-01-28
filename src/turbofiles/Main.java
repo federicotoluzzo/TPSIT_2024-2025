@@ -7,54 +7,73 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        final int N_THREADS = 1;
-        final int N_ITERATIONS = 10 * (int) Math.pow(2, 10);
-        Thread[] threads = new Thread[N_THREADS];
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < N_THREADS; i++) {
-            int finalI = i;
-            threads[i] = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int j = N_ITERATIONS * finalI / N_THREADS; j < N_ITERATIONS * (finalI + 1) / N_THREADS; j++) {
-                        makeFolder("C:\\Users\\federico.toluzzo\\IdeaProjects\\TPSIT_2024-2025\\src\\turbofiles\\files", String.valueOf(j));
-                        makeFile(String.valueOf(j), (int) Math.pow(2, 20));
+        final int MAX_THREADS = 24;
+        final int N_ITERATIONS = 100 * (int) Math.pow(2, 10); // 100GiB total
+        Thread[] threads = new Thread[MAX_THREADS];
+
+        for (int j = MAX_THREADS; j > 0; j--) {
+            String mainFolder = "files/" + j;
+            createFolder(mainFolder); // Create the main folder for this iteration
+
+            long start = System.currentTimeMillis();
+            for (int i = MAX_THREADS - 1; i >= 0; i--) {
+                int finalI = i;
+                int finalJ = j;
+                threads[i] = new Thread(() -> {
+                    for (int k = N_ITERATIONS * finalI / finalJ; k < N_ITERATIONS * (finalI + 1) / finalJ; k++) {
+                        String subFolder = mainFolder + "/" + k;
+                        createFolder(subFolder);
+                        createFile(subFolder, (int) Math.pow(2, 20));
                     }
-                }
-            });
-            threads[i].start();
-        }
-        for (int i = 0; i < N_THREADS; i++) {
-            try {
-                threads[i].join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                });
+                threads[i].start();
             }
+
+            for (int i = 0; i < j; i++) {
+                try {
+                    threads[i].join();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            long end = System.currentTimeMillis();
+            System.out.printf("Tempo impiegato per scrivere 100GiB di dati con %d thread: %d secondi%n", j, (end - start) / 1000);
+
+            // Delete the main folder and its contents after the iteration
+            deleteFolder(new File(mainFolder));
         }
-        long end = System.currentTimeMillis();
-
-        System.out.printf("Tempo impiegato : %d secondi", (end - start)/1_000);
     }
 
-    public static void makeFolder(String path, String name){
-        File folder = new File(path + "/" + name);
-        folder.mkdir();
+    public static void createFolder(String path) {
+        File folder = new File(path);
+        if (!folder.exists()) {
+            folder.mkdirs(); // Create the directory structure if it does not exist
+        }
     }
 
-    public static void makeFile(String path, int size){
-        FileWriter file = null;
-        try {
-            file = new FileWriter("C:\\Users\\federico.toluzzo\\IdeaProjects\\TPSIT_2024-2025\\src\\turbofiles\\files\\" + path + "\\numeri.txt");
+    public static void createFile(String path, int size) {
+        createFolder(path); // Ensure the directory exists
+        File file = new File(path + "/numeri.txt");
+
+        try (FileWriter writer = new FileWriter(file)) {
+            for (int i = 0; i < size; i++) {
+                writer.write(' ');
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        Random r = new Random();
-        for (int i = 0; i < size; i++){
-            try {
-                file.write(' ');
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    }
+
+    public static void deleteFolder(File folder) {
+        if (folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    deleteFolder(file); // Recursively delete subfolders and files
+                }
             }
         }
+        folder.delete(); // Delete the folder itself
     }
 }
